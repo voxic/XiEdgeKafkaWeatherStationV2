@@ -1,0 +1,52 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: task-influx-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      volumes:
+        - name: var-lib-influxdb
+          persistentVolumeClaim:
+            claimName: task-influx-claim
+      containers:
+        - name: influxdb
+          image: 'docker.io/influxdb:1.6.4'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          volumeMounts:
+            - mountPath: /var/lib/influxdb
+              name: var-lib-influxdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-influxdb
+  labels:
+    app: influxdb
+spec:
+  type: NodePort
+  ports:
+    - port: 8086
+  selector:
+    app: influxdb                    

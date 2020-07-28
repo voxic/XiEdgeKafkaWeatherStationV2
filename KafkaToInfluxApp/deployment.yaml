@@ -1,0 +1,26 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: xi-kafka-influx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xi-kafka-influx
+  template:
+    metadata:
+      labels:
+        app: xi-kafka-influx
+    spec:
+      containers:
+        - name: xi-kafka-influx
+          image: voxic/xektia
+          imagePullPolicy: Always
+          env:
+            - name: KAFKA_SERVER
+              value: '{{.Services.Kafka.Endpoint}}'
+            - name: KAFKA_TOPIC
+              value: weather-data
+            - name: INFLUXDB_SERVER
+              value: svc-influxdb
