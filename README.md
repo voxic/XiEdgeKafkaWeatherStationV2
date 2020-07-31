@@ -327,7 +327,18 @@ We have now finished the setup of Xi IoT Weather Station.
 To access the Grafana user interface open your browser and typ in the ip to your service domain (```https://ip-to-servicedomain/```).
 Default username _and_ password for Grafana is ```admin```
 
-Once logged in to Grafana you can import this template Dashboard using the ```+``` in the left menu to import JSON. 
+#### Configuring Grafana data source (connecting Grafana to InfluxDB)
+
+In Grafana click on the cogs icon in the menu on the left. Click on ```Data Sources```.  
+Click ```Add Data Source```.
+Fill in settings:
+
+!["Grafana db"](grafanaDB.png)
+
+Click on ```Save and Test```.
+
+Once the data source is connected you can import this template Dashboard using the ```+``` in the left menu to import JSON.
+
 ```json
 {
   "annotations": {
